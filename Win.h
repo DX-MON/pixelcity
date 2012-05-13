@@ -18,7 +18,7 @@
 #define FADE_TIME           (SCREENSAVER ? 1500 : 1) //milliseconds
 //Debug ground texture that shows traffic lanes
 #define SHOW_DEBUG_GROUND   0
-//Controls the ammount of space available for buildings.  
+//Controls the ammount of space available for buildings.
 //Other code is wrtten assuming this will be a power of two.
 #define WORLD_SIZE          1024
 #define WORLD_HALF          (WORLD_SIZE / 2)
@@ -33,18 +33,19 @@
 //Random SATURATED color
 #define RANDOM_COLOR          (glRgbaFromHsl ((float)RandomVal (255)/255,1.0f, 0.75f))
 //Used in orienting roads and cars
+
 enum
 {
-  NORTH,
-  EAST,
-  SOUTH,
-  WEST
+	NORTH,
+	EAST,
+	SOUTH,
+	WEST
 };
 
-HWND  WinHwnd (void);
-void  WinPopup (char* message, ...);
-void  WinTerm (void);
-bool  WinInit (void);
-int   WinWidth (void);
-int   WinHeight (void);
-void  WinMousePosition (int* x, int* y);
+HWND WinHwnd(void);
+void WinPopup(char* message, ...);
+void WinTerm(void);
+bool WinInit(void);
+int WinWidth(void);
+int WinHeight(void);
+void WinMousePosition(int* x, int* y);
