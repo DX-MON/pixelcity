@@ -6,7 +6,7 @@
 
 
 -------------------------------------------------------------------------------
-  
+
   This takes various types of data and dumps them into a predefined ini file.
 
 -----------------------------------------------------------------------------*/
@@ -17,26 +17,65 @@
 #define INI_FILE            ".\\" APP ".ini"
 #define SECTION             "Settings"
 
-#include <windows.h>
+#ifdef _WINDOWS
+	#include <windows.h>
+#endif
 #include <stdio.h>
 #include "glTypes.h"
 
-#include "ini.h"
-#include "win.h"
+#include "Ini.h"
+#include "OS.h"
 
-static char                 result[MAX_RESULT];
+static char result[MAX_RESULT];
 
 /*-----------------------------------------------------------------------------
 
 -----------------------------------------------------------------------------*/
 
-int IniInt (char* entry)
+int IniInt(const char *entry)
+{
+	int result;
+
+	result = GetPrivateProfileInt(SECTION, entry, 0, INI_FILE);
+	return result;
+}
+
+/*-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------*/
+
+void IniIntSet(const char *entry, int val)
+{
+	char buf[20];
+
+	sprintf(buf, "%d", val);
+	WritePrivateProfileString(SECTION, entry, buf, INI_FILE);
+}
+
+/*-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------*/
+
+float IniFloat(const char *entry)
+{
+	float f;
+
+	GetPrivateProfileString(SECTION, entry, "", result, MAX_RESULT, INI_FILE);
+	f = (float)atof(result);
+	return f;
+}
+
+/*-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------*/
+
+void IniFloatSet(char* entry, float val)
 {
 
-  int         result;
+	char buf[20];
 
-  result = GetPrivateProfileInt (SECTION, entry, 0, INI_FILE);
-  return result;
+	sprintf(buf, FORMAT_FLOAT, val);
+	WritePrivateProfileString(SECTION, entry, buf, INI_FILE);
 
 }
 
@@ -44,13 +83,11 @@ int IniInt (char* entry)
 
 -----------------------------------------------------------------------------*/
 
-void IniIntSet (char* entry, int val)
+char* IniString(char* entry)
 {
 
-  char        buf[20];
-
-  sprintf (buf, "%d", val);
-  WritePrivateProfileString (SECTION, entry, buf, INI_FILE);
+	GetPrivateProfileString(SECTION, entry, "", result, MAX_RESULT, INI_FILE);
+	return result;
 
 }
 
@@ -58,14 +95,10 @@ void IniIntSet (char* entry, int val)
 
 -----------------------------------------------------------------------------*/
 
-float IniFloat (char* entry)
+void IniStringSet(char* entry, char* val)
 {
 
-  float     f;
-
-  GetPrivateProfileString (SECTION, entry, "", result, MAX_RESULT, INI_FILE);
-  f = (float)atof (result);
-  return f;
+	WritePrivateProfileString(SECTION, entry, val, INI_FILE);
 
 }
 
@@ -73,26 +106,11 @@ float IniFloat (char* entry)
 
 -----------------------------------------------------------------------------*/
 
-void IniFloatSet (char* entry, float val)
+void IniVectorSet(char* entry, GLvector v)
 {
 
-  char        buf[20];
-  
-  sprintf (buf, FORMAT_FLOAT, val);
-  WritePrivateProfileString (SECTION, entry, buf, INI_FILE);
-
-}
-
-
-/*-----------------------------------------------------------------------------
-
------------------------------------------------------------------------------*/
-
-char* IniString (char* entry)
-{
-
-  GetPrivateProfileString (SECTION, entry, "", result, MAX_RESULT, INI_FILE);
-  return result;
+	sprintf(result, FORMAT_VECTOR, v.x, v.y, v.z);
+	WritePrivateProfileString(SECTION, entry, result, INI_FILE);
 
 }
 
@@ -100,38 +118,14 @@ char* IniString (char* entry)
 
 -----------------------------------------------------------------------------*/
 
-void IniStringSet (char* entry, char* val)
+GLvector IniVector(char* entry)
 {
 
-  WritePrivateProfileString (SECTION, entry, val, INI_FILE);
+	GLvector v;
 
-}
-
-
-/*-----------------------------------------------------------------------------
-
------------------------------------------------------------------------------*/
-
-void IniVectorSet (char* entry, GLvector v)
-{
-  
-  sprintf (result, FORMAT_VECTOR, v.x, v.y, v.z);
-  WritePrivateProfileString (SECTION, entry, result, INI_FILE);
-
-}
-
-/*-----------------------------------------------------------------------------
-
------------------------------------------------------------------------------*/
-
-GLvector IniVector (char* entry)
-{
-
-  GLvector  v;
-
-  v.x = v.y = v.z = 0.0f;
-  GetPrivateProfileString (SECTION, entry, "0 0 0", result, MAX_RESULT, INI_FILE);
-  sscanf (result, FORMAT_VECTOR, &v.x, &v.y, &v.z);
-  return v;
+	v.x = v.y = v.z = 0.0f;
+	GetPrivateProfileString(SECTION, entry, "0 0 0", result, MAX_RESULT, INI_FILE);
+	sscanf(result, FORMAT_VECTOR, &v.x, &v.y, &v.z);
+	return v;
 
 }
