@@ -14,34 +14,34 @@
 
 enum
 {
-  TEXTURE_LIGHT,
-  TEXTURE_SOFT_CIRCLE,
-  TEXTURE_SKY,
-  TEXTURE_LOGOS,
-  TEXTURE_TRIM,
-  TEXTURE_BLOOM,
-  TEXTURE_HEADLIGHT,
-  TEXTURE_LATTICE,
-  TEXTURE_BUILDING1,
-  TEXTURE_BUILDING2,
-  TEXTURE_BUILDING3,
-  TEXTURE_BUILDING4,
-  TEXTURE_BUILDING5,
-  TEXTURE_BUILDING6,
-  TEXTURE_BUILDING7,
-  TEXTURE_BUILDING8,
-  TEXTURE_BUILDING9,
-  TEXTURE_COUNT,
+	TEXTURE_LIGHT,
+	TEXTURE_SOFT_CIRCLE,
+	TEXTURE_SKY,
+	TEXTURE_LOGOS,
+	TEXTURE_TRIM,
+	TEXTURE_BLOOM,
+	TEXTURE_HEADLIGHT,
+	TEXTURE_LATTICE,
+	TEXTURE_BUILDING1,
+	TEXTURE_BUILDING2,
+	TEXTURE_BUILDING3,
+	TEXTURE_BUILDING4,
+	TEXTURE_BUILDING5,
+	TEXTURE_BUILDING6,
+	TEXTURE_BUILDING7,
+	TEXTURE_BUILDING8,
+	TEXTURE_BUILDING9,
+	TEXTURE_COUNT,
 };
 
 #define BUILDING_COUNT    ((TEXTURE_BUILDING9 - TEXTURE_BUILDING1) + 1)
 
-unsigned  TextureFromName (char* name);
-unsigned  TextureId (int id);
-void      TextureInit (void);
-void      TextureTerm (void);
-unsigned  TextureRandomBuilding (int index);
-bool      TextureReady ();
-void      TextureReset (void);
-void      TextureUpdate (void);
+unsigned TextureFromName(char* name);
+unsigned TextureId(int id);
+void TextureInit(void);
+void TextureTerm(void);
+unsigned TextureRandomBuilding(int index);
+bool TextureReady();
+void TextureReset(void);
+void TextureUpdate(void);
 
