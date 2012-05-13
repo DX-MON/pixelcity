@@ -7,17 +7,27 @@
 -------------------------------------------------------------------------------
 
   This class is used to make constructing objects easier. It handles
-  allocating vertex lists, polygon lists, and suchlike. 
+  allocating vertex lists, polygon lists, and suchlike.
 
-  If you were going to implement vertex buffers, this would be the place to 
+  If you were going to implement vertex buffers, this would be the place to
   do it.  Take away the _vertex member variable and store verts for ALL meshes
   in a common list, which could then be unloaded onto the good 'ol GPU.
 
 -----------------------------------------------------------------------------*/
 
-#include <windows.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
+#ifdef _WINDOWS
+	#include <windows.h>
+#endif
+#if defined(__MACOSX__)
+	#include <OpenGL/gl.h>
+	#include <OpenGL/gl.h>
+#elif defined(__MACOS__)
+	#include <GL/gl.h>
+	#include <GL/glu.h>
+#else
+	#include <GL/gl.h>
+	#include <GL/glu.h>
+#endif
 
 #include <vector>
 #include "glTypes.h"
@@ -27,152 +37,134 @@
 
 -----------------------------------------------------------------------------*/
 
-CMesh::CMesh ()
+CMesh::CMesh()
 {
-
-  _list = glGenLists(1);
-  _compiled = false;
-  _polycount = 0;
-
+	_list = glGenLists(1);
+	_compiled = false;
+	_polycount = 0;
 }
 
 /*-----------------------------------------------------------------------------
 
 -----------------------------------------------------------------------------*/
 
-CMesh::~CMesh ()
+CMesh::~CMesh()
 {
-
-  glDeleteLists (_list, 1);
-  _vertex.clear ();
-  _fan.clear ();
-  _quad_strip.clear ();
-  _cube.clear ();
-
-
+	glDeleteLists(_list, 1);
+	_vertex.clear();
+	_fan.clear();
+	_quad_strip.clear();
+	_cube.clear();
 }
 
 /*-----------------------------------------------------------------------------
 
 -----------------------------------------------------------------------------*/
 
-void CMesh::VertexAdd (const GLvertex& v)
+void CMesh::VertexAdd(const GLvertex& v)
 {
-
-  _vertex.push_back(v);
-
+	_vertex.push_back(v);
 }
 
 /*-----------------------------------------------------------------------------
 
 -----------------------------------------------------------------------------*/
 
-void CMesh::CubeAdd (const cube& c)
+void CMesh::CubeAdd(const cube& c)
 {
-
-  _cube.push_back(c);
-  _polycount += 5;
-
+	_cube.push_back(c);
+	_polycount += 5;
 }
 
 /*-----------------------------------------------------------------------------
 
 -----------------------------------------------------------------------------*/
 
-void CMesh::QuadStripAdd (const quad_strip& qs)
+void CMesh::QuadStripAdd(const quad_strip& qs)
 {
-
-  _quad_strip.push_back(qs);
-  _polycount += (qs.index_list.size() - 2) / 2;
-
+	_quad_strip.push_back(qs);
+	_polycount += (qs.index_list.size() - 2) / 2;
 }
-
 
 /*-----------------------------------------------------------------------------
 
 -----------------------------------------------------------------------------*/
 
-void CMesh::FanAdd (const fan& f)
+void CMesh::FanAdd(const fan& f)
 {
-
-  _fan.push_back(f);
-  _polycount += f.index_list.size() - 2;
-
+	_fan.push_back(f);
+	_polycount += f.index_list.size() - 2;
 }
-
 
 /*-----------------------------------------------------------------------------
 
 -----------------------------------------------------------------------------*/
 
-void CMesh::Render ()
+void CMesh::RenderTexturedVertex(GLvertex *vert)
 {
-
-  std::vector<quad_strip>::iterator qsi;
-  std::vector<cube>::iterator ci;
-  std::vector<fan>::iterator fi;
-  std::vector<int>::iterator n;
-
-  if (_compiled) {
-    glCallList (_list);
-    return;
-  }
-  for (qsi = _quad_strip.begin(); qsi < _quad_strip.end(); ++qsi) {
-    glBegin (GL_QUAD_STRIP);
-    for (n = qsi->index_list.begin(); n < qsi->index_list.end(); ++n) {
-      glTexCoord2fv (&_vertex[*n].uv.x);
-      glVertex3fv (&_vertex[*n].position.x);
-    }
-    glEnd ();
-  }
-  for (ci = _cube.begin(); ci < _cube.end(); ++ci) {
-    glBegin (GL_QUAD_STRIP);
-    for (n = ci->index_list.begin(); n < ci->index_list.end(); ++n) {
-      glTexCoord2fv (&_vertex[*n].uv.x);
-      glVertex3fv (&_vertex[*n].position.x);
-    }
-    glEnd ();
-    
-    glBegin (GL_QUADS);
-    glTexCoord2fv (&_vertex[ci->index_list[7]].uv.x);
-    glVertex3fv (&_vertex[ci->index_list[7]].position.x);
-    glVertex3fv (&_vertex[ci->index_list[5]].position.x);
-    glVertex3fv (&_vertex[ci->index_list[3]].position.x);
-    glVertex3fv (&_vertex[ci->index_list[1]].position.x);
-    glEnd ();
-    
-    glBegin (GL_QUADS);
-    glTexCoord2fv (&_vertex[ci->index_list[6]].uv.x);
-    glVertex3fv (&_vertex[ci->index_list[0]].position.x);
-    glVertex3fv (&_vertex[ci->index_list[2]].position.x);
-    glVertex3fv (&_vertex[ci->index_list[4]].position.x);
-    glVertex3fv (&_vertex[ci->index_list[6]].position.x);
-    glEnd ();
-
-  
-  }
-  for (fi = _fan.begin(); fi < _fan.end(); ++fi) {
-    glBegin (GL_TRIANGLE_FAN);
-    for (n = fi->index_list.begin(); n < fi->index_list.end(); ++n) {
-      glTexCoord2fv (&_vertex[*n].uv.x);
-      glVertex3fv (&_vertex[*n].position.x);
-    }
-    glEnd ();
-  }
-
+	glTexCoord2f(vert->uv.x, vert->uv.y);
+	glVertex3f(vert->position.x, vert->position.y, vert->position.z);
 }
 
+void CMesh::Render()
+{
+	std::vector<quad_strip>::iterator qsi;
+	std::vector<cube>::iterator ci;
+	std::vector<fan>::iterator fi;
+	std::vector<int>::iterator n;
+
+	if (_compiled)
+	{
+		glCallList(_list);
+		return;
+	}
+	for (qsi = _quad_strip.begin(); qsi < _quad_strip.end(); qsi++)
+	{
+		glBegin(GL_QUAD_STRIP);
+		for (n = qsi->index_list.begin(); n < qsi->index_list.end(); n++)
+			RenderTexturedVertex(&_vertex[*n]);
+		glEnd();
+	}
+	for (ci = _cube.begin(); ci < _cube.end(); ci++)
+	{
+		glBegin(GL_QUAD_STRIP);
+		for (n = ci->index_list.begin(); n < ci->index_list.end(); n++)
+			RenderTexturedVertex(&_vertex[*n]);
+		glEnd();
+
+		glBegin(GL_QUADS);
+		glTexCoord2fv(&_vertex[ci->index_list[7]].uv.x);
+		glVertex3fv(&_vertex[ci->index_list[7]].position.x);
+		glVertex3fv(&_vertex[ci->index_list[5]].position.x);
+		glVertex3fv(&_vertex[ci->index_list[3]].position.x);
+		glVertex3fv(&_vertex[ci->index_list[1]].position.x);
+		glEnd();
+
+		glBegin(GL_QUADS);
+		glTexCoord2fv(&_vertex[ci->index_list[6]].uv.x);
+		glVertex3fv(&_vertex[ci->index_list[0]].position.x);
+		glVertex3fv(&_vertex[ci->index_list[2]].position.x);
+		glVertex3fv(&_vertex[ci->index_list[4]].position.x);
+		glVertex3fv(&_vertex[ci->index_list[6]].position.x);
+		glEnd();
+	}
+	for (fi = _fan.begin(); fi < _fan.end(); ++fi)
+	{
+		glBegin(GL_TRIANGLE_FAN);
+		for (n = fi->index_list.begin(); n < fi->index_list.end(); ++n)
+			RenderTexturedVertex(&_vertex[*n]);
+		glEnd();
+	}
+}
 
 /*-----------------------------------------------------------------------------
 
 -----------------------------------------------------------------------------*/
 
-void CMesh::Compile ()
+void CMesh::Compile()
 {
-
-  glNewList (_list, GL_COMPILE);
-  Render ();
-  glEndList();	
-  _compiled = true;
-
+	glNewList(_list, GL_COMPILE);
+	Render();
+	glEndList();
+	_compiled = true;
 }
