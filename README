@@ -1,0 +1,23 @@
+Just a few notes about this fork:
+
+It depends upon an as-yet unreleased GUI framework named GTK++,
+I plan on releasing this soon but it needs a bit more work done to
+make it release worthy.
+
+The code is formatted to play nice with editors that don't understand
+the spaces-for-tabs format. It should not matter what your tab width
+is set to, I use 4 but 2 and 8 should look good too.
+
+The Makefile has one overridable variable:
+GCC - controls how GCC is configured, a typical value for this
+variable for a 64-bit build is
+GCC="gcc -m64 -fPIC -DPIC"
+
+All Linux-specific stuff should be found in Linux.h
+OS.h automatically switches between the Windows and Linux implementation
+Under Linux, OS.h also defines the otherwise-undefined functions
+GetTickCount(), GetRValue(), GetGValue() and GetBValue().
+This is done this way to help minimise changes needed to be made to
+the rest of the code base.
+
+Please report bugs to dx-mon@users.sourceforge.net
