@@ -1,29 +1,29 @@
 #ifndef glTYPES
-	#define glTYPES
+#define glTYPES
 
-	#define GL_CLAMP_TO_EDGE 0x812F
+#define GL_CLAMP_TO_EDGE 0x812F
 
-	#define OPERATORS(type)     \
-  type    operator+  (const type& c); \
-  type    operator+  (const float& c);\
-  void    operator+= (const type& c);\
-  void    operator+= (const float& c);\
-  type    operator-  (const type& c);\
-  type    operator-  (const float& c);\
-  void    operator-= (const type& c);\
-  void    operator-= (const float& c);\
-  type    operator*  (const type& c);\
-  type    operator*  (const float& c);\
-  void    operator*= (const type& c);\
-  void    operator*= (const float& c);\
-  type    operator/  (const type& c);\
-  type    operator/  (const float& c);\
-  void    operator/= (const type& c);\
-  void    operator/= (const float& c);\
-  bool    operator== (const type& c);
+#define OPERATORS(type)	 \
+	type	operator +(const type& c); \
+	type	operator +(const float& c);\
+	void	operator +=(const type& c);\
+	void	operator +=(const float& c);\
+	type	operator -(const type& c);\
+	type	operator -(const float& c);\
+	void	operator -=(const type& c);\
+	void	operator -=(const float& c);\
+	type	operator *(const type& c);\
+	type	operator *(const float& c);\
+	void	operator *=(const type& c);\
+	void	operator *=(const float& c);\
+	type	operator /(const type& c);\
+	type	operator /(const float& c);\
+	void	operator /=(const type& c);\
+	void	operator /=(const float& c);\
+	bool	operator ==(const type& c);
 
 
-	#define JOINT_MAX_CHILDREN  8
+#define JOINT_MAX_CHILDREN	8
 
 struct GLquat
 {
@@ -100,57 +100,57 @@ struct GLtriangle
 class GLmodel
 {
 public:
-  unsigned    vertex_count;
-  unsigned    triangle_count;
-  unsigned    normal_count;
-  GLvertex*   vertex;
-  GLvector*   normal;
-  GLtriangle* triangle;
+	unsigned	vertex_count;
+	unsigned	triangle_count;
+	unsigned	normal_count;
+	GLvertex*	 vertex;
+	GLvector*	 normal;
+	GLtriangle* triangle;
 
-  void        TriangleRender (unsigned n);
-  GLtriangle* TriangleAdd (unsigned v1, int unsigned, int unsigned);
-  GLtriangle* TriangleAdd (GLtriangle c);
-  void        NormalAdd (GLvector n);
-  void        VertexAdd (GLvertex v);
-			  GLmodel ();
-			  ~GLmodel ();
-  void        Render ();
-  GLbbox      BBox ();
+	void		TriangleRender (unsigned n);
+	GLtriangle* TriangleAdd (unsigned v1, int unsigned, int unsigned);
+	GLtriangle* TriangleAdd (GLtriangle c);
+	void		NormalAdd (GLvector n);
+	void		VertexAdd (GLvertex v);
+				GLmodel ();
+				~GLmodel ();
+	void		Render ();
+	GLbbox		BBox ();
 private:
-  GLbbox      m_bbox;
+	GLbbox		m_bbox;
 
 };
 
 struct GLkeyframe
 {
-  float     time;
-  GLvector  offset;
-  GLvector  rotation;
+	float	 time;
+	GLvector	offset;
+	GLvector	rotation;
 };
 
 struct GLsegment
 {
-  int           index;
-  GLvector      rotation;
-  GLvector      offset;
-  GLkeyframe    keyframes[255];
-  int           frame_count;
+	int			 index;
+	GLvector		rotation;
+	GLvector		offset;
+	GLkeyframe	keyframes[255];
+	int			 frame_count;
 };
 
 class GLanimate
 {
 public:
 				GLanimate ();
-  void          KeyframeAdd (int joint, float time, GLquat q);
-  void          TimeSet (float time);
-  void          PositionSet (float pos);
-  GLvector      Rotation (int);
-  GLvector      Offset (int);
+	void			KeyframeAdd (int joint, float time, GLquat q);
+	void			TimeSet (float time);
+	void			PositionSet (float pos);
+	GLvector		Rotation (int);
+	GLvector		Offset (int);
 
 private:
-  GLsegment*    m_segments;
-  int           m_segment_count;
-  float         m_length;
+	GLsegment*	m_segments;
+	int			 m_segment_count;
+	float		 m_length;
 };
  */
 
@@ -200,10 +200,9 @@ GLvector2 glVectorInterpolate(GLvector2 v1, GLvector2 v2, float scalar);
 GLvector2 glVectorSinCos(float angle);
 float glVectorLength(GLvector2 v);
 
-
 #endif
 
 #ifndef NULL
-	#define NULL  0
+	#define NULL	0
 #endif
 
