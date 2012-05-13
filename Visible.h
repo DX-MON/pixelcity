@@ -6,6 +6,6 @@
 
 
 
-void VisibleUpdate (void);
-bool Visible (GLvector pos);
-bool Visible (int x, int z);
+void VisibleUpdate(void);
+bool Visible(GLvector pos);
+bool Visible(int x, int z);
