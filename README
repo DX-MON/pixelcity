@@ -1,8 +1,7 @@
 Just a few notes about this fork:
 
-It depends upon an as-yet unreleased GUI framework named GTK++,
-I plan on releasing this soon but it needs a bit more work done to
-make it release worthy.
+It depends a GUI framework named GTK++, which may also be found on GitHub
+and soon via http://gtk.rachelmant.com/
 
 The code is formatted to play nice with editors that don't understand
 the spaces-for-tabs format. It should not matter what your tab width
